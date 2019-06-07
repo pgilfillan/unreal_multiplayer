@@ -14,5 +14,5 @@ class DICE_MAY_19_API UTestGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
-	virtual void Init() override;
+	//virtual void Init() override;
 };

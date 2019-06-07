@@ -2,7 +2,7 @@
 
 
 #include "TestGameInstance.h"
-
+/*
 void UTestGameInstance::Init()
 {
 	if (IsDedicatedServerInstance())
@@ -15,4 +15,4 @@ void UTestGameInstance::Init()
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("Online platform name: %s"), *GetOnlinePlatformName().ToString());
-}
+}*/

@@ -4,10 +4,19 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
 
+#define print(text, ...)	if (GEngine) { GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT(text), ##__VA_ARGS__), false); \
+											UE_LOG(LogTemp, Warning, TEXT(text), ##__VA_ARGS__); }
+
+AInGameSession::AInGameSession(const FObjectInitializer& ObjectInitializer) :
+	Super(ObjectInitializer)
+{
+	print("Net mode is %d", GetNetMode())
+}
+
 void AInGameSession::RegisterServer()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Registering server"));
-	IOnlineSubsystem* const OnlineSub = IOnlineSubsystem::Get(FName("Null"));
+	IOnlineSubsystem* const OnlineSub = IOnlineSubsystem::Get();
 	if (!OnlineSub)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to get OSS"));
@@ -21,10 +30,14 @@ void AInGameSession::RegisterServer()
 		return;
 	}
 
-	Sessions->ClearOnCreateSessionCompleteDelegate_Handle(OnCreateSessionCompleteDelegateHandle);
-
-	OnCreateSessionCompleteDelegate = FOnCreateSessionCompleteDelegate::CreateUObject(this, &AInGameSession::OnCreateSessionComplete);
+	Sessions->AddOnCreateSessionCompleteDelegate_Handle(FOnCreateSessionCompleteDelegate::CreateUObject(this, &AInGameSession::OnCreateSessionComplete));
 	FOnlineSessionSettings Settings;
+	Settings.NumPublicConnections = 50;
+	Settings.bIsLANMatch = true;
+	//Settings.bAllowJoinInProgress = true;
+	Settings.bIsDedicated = true;
+	Settings.bUsesPresence = false;
+	Settings.bAllowJoinViaPresence = false;
 
 	UE_LOG(LogTemp, Warning, TEXT("Creating session"));
 	Sessions->CreateSession(0, NAME_GameSession, Settings);

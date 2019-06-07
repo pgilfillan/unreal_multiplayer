@@ -8,12 +8,17 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Engine.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ADICE_May_19Character
 
+#define print(text, ...)	if (GEngine) { GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT(text), ##__VA_ARGS__), false); \
+											UE_LOG(LogTemp, Warning, TEXT(text), ##__VA_ARGS__); }
+
 ADICE_May_19Character::ADICE_May_19Character()
 {
+	print("Net mode is %d", GetNetMode());
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
